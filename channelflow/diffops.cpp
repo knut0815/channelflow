@@ -787,7 +787,7 @@ Real wallshear(const FlowField& f, bool normalize) {
 
 Real wallshearLower(const FlowField& f, bool normalize) {
     Real dfdy_a = sqrt(f.dudy_a() * f.dudy_a() + f.dwdy_a() * f.dwdy_a());
-    Real I = 0.5 * dfdy_a;
+    Real I = 0.5 * abs(dfdy_a);
     if (!normalize)
         I *= 2 * f.Lx() * f.Lz();
     return I;
@@ -795,7 +795,7 @@ Real wallshearLower(const FlowField& f, bool normalize) {
 
 Real wallshearUpper(const FlowField& f, bool normalize) {
     Real dfdy_b = sqrt(f.dudy_b() * f.dudy_b() + f.dwdy_b() * f.dwdy_b());
-    Real I = 0.5 * dfdy_b;
+    Real I = 0.5 * abs(dfdy_b);
     if (!normalize)
         I *= 2 * f.Lx() * f.Lz();
     return I;
@@ -3933,8 +3933,8 @@ Real Ecf(const FlowField& u) { return pow(L2Norm_uvw(u, false, true, true), 2); 
 string fieldstatsheader() {
     stringstream header;
     header << setw(14) << "L2" << setw(14) << "u2" << setw(14) << "v2" << setw(14) << "w2" << setw(14) << "e3d"
-           << setw(14) << "ecf" << setw(14) << "ubulk" << setw(14) << "wbulk" << setw(14) << "wallshear" << setw(14)
-           << "wallshear_a" << setw(14) << "wallshear_b" << setw(14) << "dissipation";
+           << setw(14) << "ecf" << setw(14) << "ubulk" << setw(14) << "wbulk" << setw(14) << "|wallshr|" << setw(14)
+           << "|wallshr_a|" << setw(14) << "|wallshr_b|" << setw(14) << "dissipation";
     return header.str();
 }
 
@@ -3953,7 +3953,7 @@ string fieldstats(const FlowField& u) {
     s << setw(14) << L2Norm(u) << setw(14) << L2Norm_uvw(u, true, false, false) << setw(14)
       << L2Norm_uvw(u, false, true, false) << setw(14) << L2Norm_uvw(u, false, false, true) << setw(14) << L2Norm3d(u)
       << setw(14) << Ecf(u) << setw(14) << getUbulk(u) << setw(14) << getWbulk(u) << setw(14) << wallshear(u)
-      << setw(14) << wallshearLower(u) << setw(14) << -1 * wallshearUpper(u) << setw(14) << dissipation(u);
+      << setw(14) << wallshearLower(u) << setw(14) << wallshearUpper(u) << setw(14) << dissipation(u);
     return s.str();
 }
 
