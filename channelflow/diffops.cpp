@@ -2552,8 +2552,8 @@ void div(const FlowField& f_, FlowField& divf, const fieldstate finalstate) {
         cferror("div(FlowField f, FlowField divf): f must be 3d or 9d");
 
     f.makeState(sxz, sy);
-    if (finalstate == Spectral)
-        divf.makeSpectral();
+    if (finalstate == Physical)
+        divf.makePhysical();
     return;
 }
 
